@@ -1,0 +1,178 @@
+<div
+  class="min-h-screen bg-green-900 text-white py-10 px-4 flex flex-col items-center"
+>
+  <h2 class="text-4xl font-bold text-yellow-400 mb-8">🎡 Roulette Royale</h2>
+
+  <!-- SVG roulette -->
+  <svg viewBox="0 0 300 300" class="w-72 h-72">
+    <!-- main circle -->
+    <circle
+      cx="150"
+      cy="150"
+      r="140"
+      fill="red"
+      stroke="gold"
+      stroke-width="6"
+    />
+
+    <!-- cases numérotées -->
+    <g id="roulette-numbers">
+      <ng-container *ngFor="let num of rouletteOrder; let i = index">
+        <g [attr.transform]="'rotate(' + (i * 360) / 37 + ' 150 150)'">
+          <path
+            d="M150,150 L150,10 A140,140 0 0,1 150,150"
+            [attr.fill]="getColor(num)"
+            stroke="white"
+          ></path>
+          <text
+            [attr.x]="150"
+            [attr.y]="20"
+            text-anchor="middle"
+            alignment-baseline="middle"
+            font-size="10"
+            fill="white"
+            [attr.transform]="'rotate(' + -((i * 360) / 37) + ' 150 20)'"
+          >
+            {{ num }}
+          </text>
+        </g>
+      </ng-container>
+    </g>
+
+    <!-- golden center -->
+    <circle
+      cx="150"
+      cy="150"
+      r="20"
+      fill="gold"
+      stroke="white"
+      stroke-width="2"
+    />
+  </svg>
+
+  <!-- spin button -->
+  <button
+    class="mt-6 px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded shadow"
+    (click)="spinRoulette()"
+  >
+    🎯 Lancer la roulette
+  </button>
+
+  <!-- history of numbers -->
+  <div class="mt-10 w-full max-w-xl">
+    <h3 class="text-2xl mb-4">Historique des tirages</h3>
+    <div class="flex flex-wrap gap-2 bg-gray-800 p-4 rounded-lg shadow-inner">
+      <span
+        *ngFor="let n of numbersHistory"
+        class="bg-yellow-500 text-black px-3 py-1 rounded-full"
+      >
+        {{ n }}
+      </span>
+    </div>
+  </div>
+
+  <!-- tapis de mise SVG -->
+  <svg
+    viewBox="0 0 400 180"
+    class="mt-10 bg-green-900 rounded shadow-lg cursor-pointer"
+  >
+    <!-- Case 0 -->
+    <rect x="0" y="0" width="30" height="150" fill="green" stroke="white" />
+    <text
+      x="15"
+      y="75"
+      text-anchor="middle"
+      alignment-baseline="middle"
+      fill="white"
+      font-size="14"
+    >
+      0
+    </text>
+
+    <!-- numbers from 1 to 36 -->
+    <ng-container *ngFor="let n of numbers">
+      <ng-container *ngIf="n !== 0">
+        <rect
+          [attr.x]="30 + mathFloor((n - 1) / 3) * 30"
+          [attr.y]="(2 - ((n - 1) % 3)) * 50"
+          width="30"
+          height="50"
+          [attr.fill]="getColor(n)"
+          stroke="white"
+          (click)="selectBet('number', n)"
+        />
+        <text
+          [attr.x]="30 + mathFloor((n - 1) / 3) * 30 + 15"
+          [attr.y]="(2 - ((n - 1) % 3)) * 50 + 25"
+          text-anchor="middle"
+          alignment-baseline="middle"
+          fill="white"
+          font-size="12"
+        >
+          {{ n }}
+        </text>
+      </ng-container>
+    </ng-container>
+
+    <!-- dozens -->
+    <rect
+      x="30"
+      y="150"
+      width="120"
+      height="30"
+      [attr.fill]="getDozenHighlight(1)"
+      stroke="white"
+      (click)="selectBet('dozen', 1)"
+    />
+    <text
+      x="90"
+      y="167"
+      text-anchor="middle"
+      alignment-baseline="middle"
+      fill="white"
+      font-size="12"
+    >
+      1ère 12
+    </text>
+
+    <rect
+      x="150"
+      y="150"
+      width="120"
+      height="30"
+      [attr.fill]="getDozenHighlight(2)"
+      stroke="white"
+      (click)="selectBet('dozen', 2)"
+    />
+    <text
+      x="210"
+      y="167"
+      text-anchor="middle"
+      alignment-baseline="middle"
+      fill="white"
+      font-size="12"
+    >
+      2ème 12
+    </text>
+
+    <rect
+      x="270"
+      y="150"
+      width="120"
+      height="30"
+      [attr.fill]="getDozenHighlight(3)"
+      stroke="white"
+      (click)="selectBet('dozen', 3)"
+    />
+    <text
+      x="330"
+      y="167"
+      text-anchor="middle"
+      alignment-baseline="middle"
+      fill="white"
+      font-size="12"
+    >
+      3ème 12
+    </text>
+  </svg>
+</div>

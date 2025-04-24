@@ -1,0 +1,75 @@
+<div>
+  <div
+    style=" background-image: url('https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=516,h=344,fit=crop/A3QJRDPk4kCE2XaQ/salle-de-casino-opulente-et-a-c-la-c-gante-Yg2jv7lwWZsEj99a.png'); background-position: center top; background-repeat: no-repeat; background-size: cover;"
+  >
+    <!-- hero section -->
+    <section id="home" class="text-center py-20 bg-cover bg-center">
+      <h2 class="text-5xl font-extrabold drop-shadow-lg">
+        Bienvenue au Casino Royal
+      </h2>
+      <p class="mt-4 text-xl text-gray-300 drop-shadow-md">
+        Jouez et gagnez gros sur nos jeux en ligne&nbsp;!<sup class="text-sm"
+          >*</sup
+        >
+      </p>
+      <a
+        (click)="navService.goTo('games')"
+        class="mt-6 inline-block bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg text-lg cursor-pointer"
+      >
+        Jouer Maintenant
+      </a>
+      <p class="mt-2 text-sm text-gray-300 italic">
+        * Tous les gains sont fictifs. Aucun argent réel n’est mis en jeu.
+      </p>
+    </section>
+
+    <!-- games section -->
+    <section id="games" class="py-20 container mx-auto">
+      <h3 class="text-4xl font-bold text-center mb-10">Nos Jeux</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
+        <div
+          (click)="navService.goTo('roulette')"
+          class="p-5 bg-gray-800 rounded-lg shadow-lg cursor-pointer"
+        >
+          <h4 class="text-2xl font-semibold">🎡 Roulette</h4>
+          <p class="mt-2 text-gray-300">Rouge ou Noir, faites vos jeux !</p>
+        </div>
+        <div
+          (click)="navService.goTo('blackjack')"
+          class="p-5 bg-gray-800 rounded-lg shadow-lg cursor-pointer"
+        >
+          <h4 class="text-2xl font-semibold">♠️ Blackjack</h4>
+          <p class="mt-2 text-gray-300">
+            Atteignez 21 sans dépasser pour battre le croupier.
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- signup -->
+  <section id="signup" class="py-20 bg-gray-800 text-center">
+    <h3 class="text-3xl font-bold">Inscrivez-vous maintenant</h3>
+    <p class="mt-4 text-gray-300">
+      Rejoignez notre casino et tentez votre chance !
+    </p>
+    <a
+      (click)="this.navService.goTo('signup')"
+      class="mt-6 inline-block bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg text-lg cursor-pointer"
+    >
+      Créer un compte
+    </a>
+  </section>
+
+  <!-- login -->
+  <section id="login" class="py-20 text-center">
+    <h3 class="text-3xl font-bold">Déjà un compte ?</h3>
+    <p class="mt-4 text-gray-300">Connectez-vous pour continuer à jouer.</p>
+    <a
+      (click)="this.navService.goTo('login')"
+      class="mt-6 inline-block bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg cursor-pointer"
+    >
+      Se connecter
+    </a>
+  </section>
+</div>

@@ -1,0 +1,51 @@
+/* Add application styles & imports to this file! */
+/* 🎰 Styles pour la page de chargement */
+.loader-text {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.roulette {
+  width: 80px;
+  height: 80px;
+  border: 8px solid #facc15; /* jaune */
+  border-top: 8px solid #ef4444; /* rouge */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* classe pour que le texte ne puisse pas être sélectionné */
+.not-selectable {
+  user-select: none;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+}
+
+/* classe pour que le texte soit sélectionnable */
+.selectable {
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+}
