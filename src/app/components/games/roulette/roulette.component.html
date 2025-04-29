@@ -4,51 +4,7 @@
   <h2 class="text-4xl font-bold text-yellow-400 mb-8">🎡 Roulette Royale</h2>
 
   <!-- SVG roulette -->
-  <svg viewBox="0 0 300 300" class="w-72 h-72">
-    <!-- main circle -->
-    <circle
-      cx="150"
-      cy="150"
-      r="140"
-      fill="red"
-      stroke="gold"
-      stroke-width="6"
-    />
-
-    <!-- cases numérotées -->
-    <g id="roulette-numbers">
-      <ng-container *ngFor="let num of rouletteOrder; let i = index">
-        <g [attr.transform]="'rotate(' + (i * 360) / 37 + ' 150 150)'">
-          <path
-            d="M150,150 L150,10 A140,140 0 0,1 150,150"
-            [attr.fill]="getColor(num)"
-            stroke="white"
-          ></path>
-          <text
-            [attr.x]="150"
-            [attr.y]="20"
-            text-anchor="middle"
-            alignment-baseline="middle"
-            font-size="10"
-            fill="white"
-            [attr.transform]="'rotate(' + -((i * 360) / 37) + ' 150 20)'"
-          >
-            {{ num }}
-          </text>
-        </g>
-      </ng-container>
-    </g>
-
-    <!-- golden center -->
-    <circle
-      cx="150"
-      cy="150"
-      r="20"
-      fill="gold"
-      stroke="white"
-      stroke-width="2"
-    />
-  </svg>
+  <app-roulette-wheel></app-roulette-wheel>
 
   <!-- spin button -->
   <button
