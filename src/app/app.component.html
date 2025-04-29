@@ -1,14 +1,14 @@
-<!-- layout principal -->
+<!-- main layout container -->
 <div class="bg-gray-900 text-white min-h-screen not-selectable">
-  <!-- barre de navigation -->
+  <!-- navigation bar -->
   <header class="bg-gradient-to-r from-yellow-500 to-red-600 p-5 shadow-lg">
     <div class="container mx-auto flex justify-between items-center">
-      <!-- Bloc gauche -->
+      <!-- left block: logo -->
       <h1 (click)="goTo('home')" class="text-3xl font-bold cursor-pointer">
         Casino Royal
       </h1>
 
-      <!-- Lien centré -->
+      <!-- center blocks: games -->
       <div class="flex-1 text-center">
         <a
           (click)="goTo('games')"
@@ -18,7 +18,7 @@
         </a>
       </div>
 
-      <!-- Bloc droit -->
+      <!-- right block: signup and login -->
       <nav>
         <ul class="flex space-x-4">
           <li>
@@ -40,7 +40,7 @@
     </div>
   </header>
 
-  <!-- affichage dynamique de la section sélectionnée -->
+  <!-- Dynamic display of the currently selected section -->
   <app-home *ngIf="navService.section() === 'home'"></app-home>
   <app-login *ngIf="navService.section() === 'login'"></app-login>
   <app-signup *ngIf="navService.section() === 'signup'"></app-signup>
@@ -48,7 +48,7 @@
   <app-roulette *ngIf="navService.section() === 'roulette'"></app-roulette>
   <app-blackjack *ngIf="navService.section() === 'blackjack'"></app-blackjack>
 
-  <!-- footer -->
+  <!-- footer section -->
   <footer class="bg-gray-900 py-6 text-center">
     <p class="text-gray-400">
       © 2025 BC Vision Limited - Jouez avec modération :)

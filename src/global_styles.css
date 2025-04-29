@@ -1,22 +1,8 @@
-/* Add application styles & imports to this file! */
-/* 🎰 Styles pour la page de chargement */
-.loader-text {
-  animation: pulse 1.5s infinite;
-}
+/**
+ * CSS file global to the whole application
+ */
 
-@keyframes pulse {
-  0% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.6;
-  }
-}
-
-.roulette {
+ .roulette {
   width: 80px;
   height: 80px;
   border: 8px solid #facc15; /* jaune */
@@ -34,7 +20,7 @@
   }
 }
 
-/* classe pour que le texte ne puisse pas être sélectionné */
+/* to make the text unselectable (on the full app) */
 .not-selectable {
   user-select: none;
   -webkit-user-select: none; /* Safari */
@@ -42,7 +28,7 @@
   -ms-user-select: none; /* IE10+/Edge */
 }
 
-/* classe pour que le texte soit sélectionnable */
+/* to make the text selectable */
 .selectable {
   user-select: text;
   -webkit-user-select: text;
