@@ -1,10 +1,17 @@
+<!-- main container with full screen height and centered content -->
 <div
   class="min-h-screen flex justify-center items-center bg-gray-900 text-white"
 >
+  <!-- login form card -->
   <div class="max-w-md w-full bg-gray-800 p-8 rounded-lg shadow-lg">
+
+    <!-- title -->
     <h3 class="text-3xl font-bold text-center mb-6">Connexion</h3>
 
+    <!-- login form -->
     <form (submit)="handleLogin($event)">
+
+      <!-- email input -->
       <label class="block mb-2 text-sm">Email</label>
       <input
         type="email"
@@ -12,6 +19,7 @@
         required
       />
 
+      <!-- password input -->
       <label class="block mb-2 text-sm">Mot de passe</label>
       <input
         type="password"
@@ -19,6 +27,7 @@
         required
       />
 
+      <!-- submit button -->
       <button
         type="submit"
         class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded"
@@ -26,10 +35,12 @@
         Se connecter
       </button>
 
+      <!-- success message shown after login -->
       <p *ngIf="loginSuccess" class="mt-4 text-green-400 text-center">
         ✅ Bienvenue joueur !
       </p>
 
+      <!-- button to navigate back to home -->
       <button
         type="button"
         class="mt-4 w-full text-sm text-gray-400 hover:underline"
@@ -37,6 +48,8 @@
       >
         ⬅️ Retour à l'accueil
       </button>
+
     </form>
+
   </div>
 </div>
