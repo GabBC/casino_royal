@@ -1,7 +1,9 @@
+/* spin animation class with smooth infinite rotation */
 .spin-animation {
   animation: spin 3s cubic-bezier(0.25, 1, 0.5, 1) infinite;
 }
 
+/* keyframes for full 360° rotation */
 @keyframes spin {
   0% {
     transform: rotate(0deg);

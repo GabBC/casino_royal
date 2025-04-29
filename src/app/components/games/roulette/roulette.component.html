@@ -1,9 +1,10 @@
 <div
   class="min-h-screen bg-green-900 text-white py-10 px-4 flex flex-col items-center"
 >
+  <!-- title -->
   <h2 class="text-4xl font-bold text-yellow-400 mb-8">🎡 Roulette Royale</h2>
 
-  <!-- SVG roulette -->
+  <!-- svg roulette wheel -->
   <app-roulette-wheel></app-roulette-wheel>
 
   <!-- spin button -->
@@ -14,7 +15,7 @@
     🎯 Lancer la roulette
   </button>
 
-  <!-- history of numbers -->
+  <!-- draw history -->
   <div class="mt-10 w-full max-w-xl">
     <h3 class="text-2xl mb-4">Historique des tirages</h3>
     <div class="flex flex-wrap gap-2 bg-gray-800 p-4 rounded-lg shadow-inner">
@@ -27,12 +28,12 @@
     </div>
   </div>
 
-  <!-- tapis de mise SVG -->
+  <!-- betting grid svg -->
   <svg
     viewBox="0 0 400 180"
     class="mt-10 bg-green-900 rounded shadow-lg cursor-pointer"
   >
-    <!-- Case 0 -->
+    <!-- cell for 0 -->
     <rect x="0" y="0" width="30" height="150" fill="green" stroke="white" />
     <text
       x="15"
@@ -45,7 +46,7 @@
       0
     </text>
 
-    <!-- numbers from 1 to 36 -->
+    <!-- cells for numbers 1 to 36 -->
     <ng-container *ngFor="let n of numbers">
       <ng-container *ngIf="n !== 0">
         <rect
@@ -70,7 +71,7 @@
       </ng-container>
     </ng-container>
 
-    <!-- dozens -->
+    <!-- first dozen -->
     <rect
       x="30"
       y="150"
@@ -91,6 +92,7 @@
       1ère 12
     </text>
 
+    <!-- second dozen -->
     <rect
       x="150"
       y="150"
@@ -111,6 +113,7 @@
       2ème 12
     </text>
 
+    <!-- third dozen -->
     <rect
       x="270"
       y="150"
