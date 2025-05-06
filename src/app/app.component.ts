@@ -43,6 +43,7 @@ import { BlackjackComponent } from './components/games/blackjack/blackjack.compo
     BlackjackComponent,
   ],
   templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   /**
