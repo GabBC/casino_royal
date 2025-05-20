@@ -1,0 +1,51 @@
+<div class="min-h-screen bg-gray-900 text-white py-20 px-4">
+
+  <!-- title section -->
+  <h2
+    class="text-4xl font-extrabold text-center mb-12 text-yellow-400 drop-shadow-lg"
+  >
+    🎲 Choisissez votre jeu
+  </h2>
+
+  <!-- game cards container -->
+  <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
+
+    <!-- roulette card -->
+    <div
+      class="bg-gray-800 rounded-lg shadow-lg hover:shadow-yellow-500 transition-all duration-300 p-6 flex flex-col items-center text-center hover:scale-105 cursor-pointer"
+    >
+      <div class="text-6xl mb-4">🎡</div>
+      <h3 class="text-2xl font-bold mb-2 text-yellow-300">Roulette</h3>
+      <p class="text-gray-300 mb-6">
+        Misez sur rouge ou noir et tentez votre chance contre le destin !
+      </p>
+      <!-- button to start roulette -->
+      <button
+        class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold px-6 py-2 rounded-full"
+        (click)="navService.goTo('roulette')"
+      >
+        Lancer la roulette
+      </button>
+    </div>
+
+    <!-- blackjack card -->
+    <div
+      class="bg-gray-800 rounded-lg shadow-lg hover:shadow-red-500 transition-all duration-300 p-6 flex flex-col items-center text-center hover:scale-105 cursor-pointer"
+    >
+      <div class="text-6xl mb-4">♠️</div>
+      <h3 class="text-2xl font-bold mb-2 text-red-300">Blackjack</h3>
+      <p class="text-gray-300 mb-6">
+        Atteignez 21 sans dépasser pour battre le croupier. Oserez-vous tenter
+        le coup ?
+      </p>
+      <!-- button to trigger blackjack alert -->
+      <button
+        class="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-full"
+        (click)="showAlert('Le jeu de blackjack sera bientôt disponible !')"
+      >
+        Jouer au blackjack
+      </button>
+    </div>
+
+  </div>
+</div>

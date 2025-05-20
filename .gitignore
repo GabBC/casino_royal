@@ -1,5 +1,25 @@
-.angular
-dist
-node_modules
-src/environments/environment.ts
-src/environments/environment.prod.ts
+# === GLOBAL ===
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+.env
+
+# === FRONTEND (Angular) ===
+/frontend/node_modules/
+/frontend/dist/
+/frontend/.angular/
+/frontend/.env
+/frontend/src/environments/environment.ts
+/frontend/src/environments/environment.prod.ts
+
+# IDE & editor settings (optional but recommended)
+.vscode/
+.idea/
+
+# === BACKEND (Spring Boot - Maven) ===
+/backend/target/
+/backend/.env
+/backend/.settings/
+/backend/.classpath
+/backend/.project
