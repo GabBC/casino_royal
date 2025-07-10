@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.security.Key;
 import java.util.Date;
@@ -25,12 +26,23 @@ public class JwtTokenProvider {
     /**
      * Secret key used to sign the JWT, in base64 format.
      */
-    private final String jwtSecret = "Vm2LXpDznqKgfVqxlSmAuENIRzyF+ztBL1xGZqLCPfFrE3V3+09uMZxblp7cM8V+NW3xzSAyxgAqD0LQK7fwNQ=="; // HS512
+    @Value("${jwt.secret}")
+    private final String jwtSecret; // HS512
 
     /**
      * Token validity period in milliseconds (24 hours).
      */
     private final long jwtExpirationInMs = 86400000;
+
+    /**
+     * Constructor to initialize JwtTokenProvider with the JWT secret key.
+     *
+     * @param jwtSecret the secret key used to sign and verify JWT tokens, injected
+     *                  from application properties
+     */
+    public JwtTokenProvider(@Value("${jwt.secret}") String jwtSecret) {
+        this.jwtSecret = jwtSecret;
+    }
 
     /**
      * Generates a JWT token for the given username.
