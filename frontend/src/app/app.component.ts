@@ -1,6 +1,6 @@
 /* Importing modules */
 
-// Angular core modules
+// Angular modules
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // import { RouterModule } from '@angular/router'; // Could be used for routing

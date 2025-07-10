@@ -1,0 +1,105 @@
+<svg
+    viewBox="0 0 400 180"
+    class="mt-10 bg-green-900 rounded shadow-lg cursor-pointer"
+  >
+    <!-- cell for 0 -->
+    <rect x="0" y="0" width="30" height="150" fill="green" stroke="white" />
+    <text
+      x="15"
+      y="75"
+      text-anchor="middle"
+      alignment-baseline="middle"
+      fill="white"
+      font-size="14"
+    >
+      0
+    </text>
+
+    <!-- cells for numbers 1 to 36 -->
+    <ng-container *ngFor="let n of numbers">
+      <ng-container *ngIf="n !== 0">
+        <rect
+          [attr.x]="30 + mathFloor((n - 1) / 3) * 30"
+          [attr.y]="(2 - ((n - 1) % 3)) * 50"
+          width="30"
+          height="50"
+          [attr.fill]="getColor(n)"
+          stroke="white"
+          (click)="selectBet('number', n)"
+        />
+        <text
+          [attr.x]="30 + mathFloor((n - 1) / 3) * 30 + 15"
+          [attr.y]="(2 - ((n - 1) % 3)) * 50 + 25"
+          text-anchor="middle"
+          alignment-baseline="middle"
+          fill="white"
+          font-size="12"
+        >
+          {{ n }}
+        </text>
+      </ng-container>
+    </ng-container>
+
+    <!-- first dozen -->
+    <rect
+      x="30"
+      y="150"
+      width="120"
+      height="30"
+      [attr.fill]="getDozenHighlight(1)"
+      stroke="white"
+      (click)="selectBet('dozen', 1)"
+    />
+    <text
+      x="90"
+      y="167"
+      text-anchor="middle"
+      alignment-baseline="middle"
+      fill="white"
+      font-size="12"
+    >
+      1ère 12
+    </text>
+
+    <!-- second dozen -->
+    <rect
+      x="150"
+      y="150"
+      width="120"
+      height="30"
+      [attr.fill]="getDozenHighlight(2)"
+      stroke="white"
+      (click)="selectBet('dozen', 2)"
+    />
+    <text
+      x="210"
+      y="167"
+      text-anchor="middle"
+      alignment-baseline="middle"
+      fill="white"
+      font-size="12"
+    >
+      2ème 12
+    </text>
+
+    <!-- third dozen -->
+    <rect
+      x="270"
+      y="150"
+      width="120"
+      height="30"
+      [attr.fill]="getDozenHighlight(3)"
+      stroke="white"
+      (click)="selectBet('dozen', 3)"
+    />
+    <text
+      x="330"
+      y="167"
+      text-anchor="middle"
+      alignment-baseline="middle"
+      fill="white"
+      font-size="12"
+    >
+      3ème 12
+    </text>
+  </svg>

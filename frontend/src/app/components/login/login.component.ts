@@ -1,7 +1,13 @@
-/* importing necessary angular modules and core services */
-import { Component } from '@angular/core'
-import { CommonModule } from '@angular/common'
-import { NavigationService } from '../../core/services/navigation.service'
+/* Importing modules */
+
+// Angular modules
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+
+// app services
+import { NavigationService } from "../../core/services/navigation.service";
+import { AuthService } from "../../core/services/auth.service";
 
 /**
  * LoginComponent
@@ -16,12 +22,14 @@ import { NavigationService } from '../../core/services/navigation.service'
  * @author Gabos
  */
 @Component({
-  selector: 'app-login',
+  selector: "app-login",
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './login.component.html',
+  imports: [CommonModule, FormsModule],
+  templateUrl: "./login.component.html",
 })
 export class LoginComponent {
+  username = "";
+  password = "";
 
   /**
    * Boolean indicating if the login was successful
@@ -29,7 +37,7 @@ export class LoginComponent {
    * @type {boolean}
    * @default false
    */
-  loginSuccess = false
+  loginSuccess = false;
 
   /**
    * Handles the login form submission
@@ -39,11 +47,34 @@ export class LoginComponent {
    * @param event {Event} The form submit event
    */
   handleLogin(event: Event) {
-    event.preventDefault()
-    this.loginSuccess = true
+    event.preventDefault();
+
+    console.log("Username:", this.username);
+    console.log("Password:", this.password);
+
+    this.authService
+      .login({
+        username: this.username,
+        password: this.password,
+      })
+      .subscribe({
+        next: (res) => {
+          console.log("Login successful!", res);
+          this.loginSuccess = true;
+
+          // Tu peux stocker le token ici
+          localStorage.setItem("token", res.token);
+        },
+        error: (err) => {
+          console.error("Erreur de connexion", err);
+          this.loginSuccess = false;
+        },
+      });
   }
 
   /* injecting the navigation service into the constructor */
-  constructor(public navService: NavigationService) {}
-
+  constructor(
+    public navService: NavigationService,
+    private authService: AuthService
+  ) {}
 }
