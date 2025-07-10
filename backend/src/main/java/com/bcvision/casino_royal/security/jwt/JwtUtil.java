@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * Utility class for generating and validating JWT tokens.
@@ -24,9 +25,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "taCleSecreteTresLongueEtComplexePourLeJWTCasinoRoyal123!";
+    @Value("${jwt.secret}")
+    private final String SECRET_KEY;
 
     private final long JWT_EXPIRATION_MS = 1000 * 60 * 60 * 10; // 10 heures
+
+    /**
+ * Constructor to initialize JwtTokenProvider with the JWT secret key.
+ *
+ * @param jwtSecret the secret key used to sign and verify JWT tokens, injected from application properties
+ */
+public JwtUtil(@Value("${jwt.secret}") String jwtSecret) {
+    this.SECRET_KEY = jwtSecret;
+}
 
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(
