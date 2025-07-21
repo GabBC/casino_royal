@@ -1,23 +1,21 @@
-/* Importing modules */
-
-// Angular modules
+/* Angular modules */
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 
-// app services
+/* App services */
 import { NavigationService } from "../../core/services/navigation.service";
 import { AuthService } from "../../core/services/auth.service";
 
 /**
  * LoginComponent
  *
- * Component responsible for handling user login simulation
- * Displays a login form and shows success feedback after submission
+ * Component responsible for handling user login.
+ * Displays a login form and processes authentication via AuthService.
  *
  * @selector app-login
  * @standalone true
- * @imports CommonModule
+ * @imports CommonModule, FormsModule
  * @templateUrl ./login.component.html
  * @author Gabos
  */
@@ -28,29 +26,37 @@ import { AuthService } from "../../core/services/auth.service";
   templateUrl: "./login.component.html",
 })
 export class LoginComponent {
-  username = "";
-  password = "";
+  /** User's username */
+  username: string = "";
+
+  /** User's password */
+  password: string = "";
+
+  /** Indicates if login was successful */
+  loginSuccess: boolean = false;
+
+  /** Holds an error message on login failure */
+  loginError: string | null = null;
 
   /**
-   * Boolean indicating if the login was successful
+   * Constructor injecting navigation and authentication services.
    *
-   * @type {boolean}
-   * @default false
+   * @param navService NavigationService used for routing/navigation
+   * @param authService AuthService used for login requests
    */
-  loginSuccess = false;
+  constructor(
+    public navService: NavigationService,
+    private authService: AuthService
+  ) {}
 
   /**
-   * Handles the login form submission
-   *
-   * Prevents default form behavior and sets loginSuccess to true
+   * Handles the login form submission.
+   * Calls the backend to authenticate the user and stores the JWT on success.
    *
    * @param event {Event} The form submit event
    */
-  handleLogin(event: Event) {
+  handleLogin(event: Event): void {
     event.preventDefault();
-
-    console.log("Username:", this.username);
-    console.log("Password:", this.password);
 
     this.authService
       .login({
@@ -59,22 +65,25 @@ export class LoginComponent {
       })
       .subscribe({
         next: (res) => {
-          console.log("Login successful!", res);
-          this.loginSuccess = true;
+          if (!res.success) {
+            this.loginError =
+              res.message || "Erreur inconnue lors de la connexion";
+            this.loginSuccess = false;
+            return;
+          }
 
-          // Tu peux stocker le token ici
-          localStorage.setItem("token", res.token);
+          this.loginSuccess = true;
+          this.loginError = null;
+
+          // Store the JWT token in local storage
+          if (res.token) {
+            localStorage.setItem("token", res.token);
+          }
         },
         error: (err) => {
-          console.error("Erreur de connexion", err);
+          this.loginError = "Erreur de connexion au serveur";
           this.loginSuccess = false;
         },
       });
   }
-
-  /* injecting the navigation service into the constructor */
-  constructor(
-    public navService: NavigationService,
-    private authService: AuthService
-  ) {}
 }

@@ -1,5 +1,7 @@
 package com.bcvision.casino_royal.dto;
 
+import lombok.Data;
+
 /**
  * DTO representing the response to a login request.
  * 
@@ -9,6 +11,7 @@ package com.bcvision.casino_royal.dto;
  * @created 2025-07-08
  * @lastModified 2025-07-08
  */
+@Data
 public class LoginResponse {
 
     private boolean success;

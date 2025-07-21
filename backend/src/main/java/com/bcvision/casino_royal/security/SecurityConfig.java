@@ -1,17 +1,22 @@
 package com.bcvision.casino_royal.security;
 
+import com.bcvision.casino_royal.security.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.bcvision.casino_royal.security.jwt.JwtAuthenticationFilter;
+import java.util.List;
 
 /**
  * Configuration class for Spring Security.
@@ -28,71 +33,75 @@ import com.bcvision.casino_royal.security.jwt.JwtAuthenticationFilter;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final CustomUserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     /**
-     * Constructor injecting the CustomUserDetailsService and
-     * JwtAuthenticationFilter.
-     * 
-     * @param userDetailsService      service to load user-specific data
-     * @param jwtAuthenticationFilter filter to validate JWT tokens on requests
+     * Constructor injecting the JwtAuthenticationFilter.
+     *
+     * @param jwtAuthenticationFilter filter to validate JWT tokens
      */
-    public SecurityConfig(CustomUserDetailsService userDetailsService,
-            JwtAuthenticationFilter jwtAuthenticationFilter) {
-        this.userDetailsService = userDetailsService;
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
     /**
-     * Configures the security filter chain for HTTP requests.
-     * 
+     * Defines the main security filter chain for the application.
+     *
      * @param http the HttpSecurity to configure
      * @return the configured SecurityFilterChain
      * @throws Exception in case of configuration errors
      */
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        
-        http.csrf(csrf -> csrf.disable());
-
-            // Authorize requests
-        http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll() // Allow unauthenticated access to auth endpoints
-                .anyRequest().authenticated() // Require authentication for all other requests
-            );
-            // Add JWT filter before the UsernamePasswordAuthenticationFilter
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/**", "/login").permitAll()
+                        .anyRequest().authenticated())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     /**
-     * Creates an AuthenticationManager bean configured with the UserDetailsService
-     * and password encoder.
-     * 
-     * @param http the HttpSecurity to get shared objects from
-     * @return the AuthenticationManager
-     * @throws Exception in case of errors
+     * Provides the global CORS configuration for the backend.
+     *
+     * @return CorsConfigurationSource with allowed origins and methods
      */
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:4200"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
 
-        authBuilder
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
-
-        return authBuilder.build();
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
     /**
-     * Defines the password encoder bean used to hash passwords.
-     * 
-     * @return a BCryptPasswordEncoder instance
+     * Provides the authentication manager bean used for authentication.
+     *
+     * @param authConfig Spring authentication configuration
+     * @return the authentication manager
+     * @throws Exception in case of configuration error
+     */
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
+
+    /**
+     * Provides the password encoder bean used to hash passwords.
+     *
+     * @return BCryptPasswordEncoder instance
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

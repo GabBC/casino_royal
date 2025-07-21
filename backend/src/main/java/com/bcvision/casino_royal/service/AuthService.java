@@ -4,7 +4,8 @@ import com.bcvision.casino_royal.dto.LoginRequest;
 import com.bcvision.casino_royal.dto.LoginResponse;
 import com.bcvision.casino_royal.model.User;
 import com.bcvision.casino_royal.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.bcvision.casino_royal.security.jwt.JwtUtil;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,50 +17,53 @@ import java.util.Optional;
  * 
  * @author Gabriel Benniks
  * @created 2025-07-08
- * @lastModified 2025-07-08
+ * @lastModified 2025-07-21
  */
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private JwtUtil jwtUtil;
 
     /**
      * Constructor injecting dependencies.
      *
-     * @param userRepository User repository
+     * @param userRepository  User repository
      * @param passwordEncoder Password encoder
+     * @param jwtUtil         JWT utility class
      */
-    @Autowired
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     /**
      * Handles login by checking credentials.
      *
      * @param loginRequest LoginRequest object
-     * @return LoginResponse with success flag and optional token
+     * @return LoginResponse with success flag and JWT token
      */
     public LoginResponse login(LoginRequest loginRequest) {
-        Optional<User> userOpt = userRepository.findByEmail(loginRequest.getEmail());
+        Optional<User> userOpt = userRepository.findByUsername(loginRequest.getUsername());
 
         LoginResponse response = new LoginResponse();
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+                String token = jwtUtil.generateToken(user.getEmail(), user.getId());
+                response.setToken(token);
+
                 response.setSuccess(true);
-                response.setMessage("Login successful");
-                // TODO: generate and return JWT
-                response.setToken("fake-jwt-token");
+                response.setToken(token);
             } else {
                 response.setSuccess(false);
-                response.setMessage("Invalid password");
+                response.setMessage("Le mot de passe est incorrect");
             }
         } else {
             response.setSuccess(false);
-            response.setMessage("User not found");
+            response.setMessage("Utilisateur non trouvé");
         }
 
         return response;

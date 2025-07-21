@@ -8,10 +8,10 @@ import java.util.Optional;
 /**
  * Repository interface for managing {@link User} entities.
  * Provides basic CRUD operations and a method to find a user by username.
- * * @author Gabriel Benniks
  * 
+ * @author Gabriel Benniks
  * @created 2025-07-08
- * @lastModified 2025-07-08
+ * @lastModified 2025-07-21
  */
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -22,13 +22,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return an Optional containing the User if found, or empty if not
      */
     Optional<User> findByUsername(String username);
-
-    /**
-     * Finds a user by email.
-     *
-     * @param email user's email
-     * @return Optional of User
-     */
-    Optional<User> findByEmail(String email);
 
 }

@@ -16,6 +16,7 @@ Thumbs.db
 # IDE & editor settings (optional but recommended)
 .vscode/
 .idea/
+.github/
 
 # === BACKEND (Spring Boot - Maven) ===
 /backend/target/
