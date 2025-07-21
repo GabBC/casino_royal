@@ -2,6 +2,11 @@
 import { Component } from "@angular/core";
 
 import { FormsModule } from "@angular/forms";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import {
+  faCircleCheck,
+  faCircleExclamation,
+} from "@fortawesome/free-solid-svg-icons";
 
 /* App services */
 import { NavigationService } from "../../core/services/navigation.service";
@@ -22,7 +27,7 @@ import { AuthService } from "../../core/services/auth.service";
 @Component({
   selector: "app-login",
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, FontAwesomeModule],
   templateUrl: "./login.component.html",
 })
 export class LoginComponent {
@@ -37,6 +42,11 @@ export class LoginComponent {
 
   /** Holds an error message on login failure */
   loginError: string | null = null;
+
+  /** FontAwesome icon for success */
+  faCheck = faCircleCheck;
+  /** FontAwesome icon for error */
+  faError = faCircleExclamation;
 
   /**
    * Constructor injecting navigation and authentication services.

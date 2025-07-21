@@ -12,6 +12,7 @@ Thumbs.db
 /frontend/.env
 /frontend/src/environments/environment.ts
 /frontend/src/environments/environment.prod.ts
+node_modules/
 
 # IDE & editor settings (optional but recommended)
 .vscode/
@@ -55,6 +56,3 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
-
-### VS Code ###
-.vscode/

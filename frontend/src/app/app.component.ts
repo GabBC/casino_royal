@@ -1,22 +1,23 @@
 /* Importing modules */
 
 // Angular modules
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 // import { RouterModule } from '@angular/router'; // Could be used for routing
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
 // Core services
-import { NavigationService } from './core/services/navigation.service';
+import { NavigationService } from "./core/services/navigation.service";
 
 // Pages components
-import { HomeComponent } from './components/home/home.component';
-import { LoginComponent } from './components/login/login.component';
-import { SignupComponent } from './components/signup/signup.component';
-import { GamesComponent } from './components/games/games.component';
+import { HomeComponent } from "./components/home/home.component";
+import { LoginComponent } from "./components/login/login.component";
+import { SignupComponent } from "./components/signup/signup.component";
+import { GamesComponent } from "./components/games/games.component";
 
 // Games components
-import { RouletteComponent } from './components/games/roulette/roulette.component';
-import { BlackjackComponent } from './components/games/blackjack/blackjack.component';
+import { RouletteComponent } from "./components/games/roulette/roulette.component";
+import { BlackjackComponent } from "./components/games/blackjack/blackjack.component";
 
 /**
  * Main application component
@@ -31,7 +32,7 @@ import { BlackjackComponent } from './components/games/blackjack/blackjack.compo
  * @templateUrl ./app.component.html
  */
 @Component({
-  selector: 'app-root',
+  selector: "app-root",
   standalone: true,
   imports: [
     HomeComponent,
@@ -39,10 +40,11 @@ import { BlackjackComponent } from './components/games/blackjack/blackjack.compo
     SignupComponent,
     GamesComponent,
     RouletteComponent,
-    BlackjackComponent
-],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+    BlackjackComponent,
+    FontAwesomeModule,
+  ],
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"],
 })
 export class AppComponent {
   /**
