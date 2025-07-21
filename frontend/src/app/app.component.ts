@@ -2,7 +2,7 @@
 
 // Angular modules
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 // import { RouterModule } from '@angular/router'; // Could be used for routing
 
 // Core services
@@ -34,14 +34,13 @@ import { BlackjackComponent } from './components/games/blackjack/blackjack.compo
   selector: 'app-root',
   standalone: true,
   imports: [
-    CommonModule,
     HomeComponent,
     LoginComponent,
     SignupComponent,
     GamesComponent,
     RouletteComponent,
-    BlackjackComponent,
-  ],
+    BlackjackComponent
+],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })

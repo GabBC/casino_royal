@@ -4,25 +4,26 @@
 
   <!-- number sectors -->
   <g id="roulette-numbers">
-    <ng-container *ngFor="let num of rouletteOrder; let i = index">
-      <g [attr.transform]="'rotate(' + (i * 360) / 37 + ' 150 150)'">
-        <!-- colored wedge -->
-        <path d="M150,150 L150,10 A140,140 0 0,1 150,150" [attr.fill]="getColor(num)" stroke="white"></path>
-
-        <!-- number label -->
-        <text
-          [attr.x]="150"
-          [attr.y]="20"
-          text-anchor="middle"
-          alignment-baseline="middle"
-          font-size="10"
-          fill="white"
-          [attr.transform]="'rotate(' + -((i * 360) / 37) + ' 150 20)'"
-        >
-          {{ num }}
-        </text>
-      </g>
-    </ng-container>
+    @for (num of rouletteOrder; track num; let i = $index) {
+      <ng-container>
+        <g [attr.transform]="'rotate(' + (i * 360) / 37 + ' 150 150)'">
+          <!-- colored wedge -->
+          <path d="M150,150 L150,10 A140,140 0 0,1 150,150" [attr.fill]="getColor(num)" stroke="white"></path>
+          <!-- number label -->
+          <text
+            [attr.x]="150"
+            [attr.y]="20"
+            text-anchor="middle"
+            alignment-baseline="middle"
+            font-size="10"
+            fill="white"
+            [attr.transform]="'rotate(' + -((i * 360) / 37) + ' 150 20)'"
+            >
+            {{ num }}
+          </text>
+        </g>
+      </ng-container>
+    }
   </g>
 
   <!-- inner center circle -->

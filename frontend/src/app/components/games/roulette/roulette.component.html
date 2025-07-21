@@ -1,6 +1,6 @@
 <div
   class="min-h-screen bg-green-900 text-white py-10 px-4 flex flex-col items-center"
->
+  >
   <!-- title -->
   <h2 class="text-4xl font-bold text-yellow-400 mb-8">🎡 Roulette Royale</h2>
 
@@ -11,7 +11,7 @@
   <button
     class="mt-6 px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded shadow"
     (click)="spinRoulette()"
-  >
+    >
     🎯 Lancer la roulette
   </button>
 
@@ -19,12 +19,13 @@
   <div class="mt-10 w-full max-w-xl">
     <h3 class="text-2xl mb-4">Historique des tirages</h3>
     <div class="flex flex-wrap gap-2 bg-gray-800 p-4 rounded-lg shadow-inner">
-      <span
-        *ngFor="let n of numbersHistory"
-        class="bg-yellow-500 text-black px-3 py-1 rounded-full"
-      >
-        {{ n }}
-      </span>
+      @for (n of numbersHistory; track n) {
+        <span
+          class="bg-yellow-500 text-black px-3 py-1 rounded-full"
+          >
+          {{ n }}
+        </span>
+      }
     </div>
   </div>
 

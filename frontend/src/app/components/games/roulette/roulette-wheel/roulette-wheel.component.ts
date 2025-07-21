@@ -1,6 +1,6 @@
 /* importing angular modules */
 import { Component } from "@angular/core";
-import { CommonModule } from "@angular/common";
+
 import { FormsModule } from "@angular/forms";
 
 /**
@@ -18,7 +18,7 @@ import { FormsModule } from "@angular/forms";
 @Component({
   selector: "app-roulette-wheel",
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: "./roulette-wheel.component.html",
   styleUrls: ["./roulette-wheel.component.css"],
 })

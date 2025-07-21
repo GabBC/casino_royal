@@ -1,6 +1,6 @@
 /* importing necessary angular modules and core services */
 import { Component } from '@angular/core'
-import { CommonModule } from '@angular/common'
+
 import { NavigationService } from '../../../core/services/navigation.service'
 
 /**
@@ -18,7 +18,7 @@ import { NavigationService } from '../../../core/services/navigation.service'
 @Component({
   selector: 'app-blackjack',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './blackjack.component.html',
   styleUrls: ['./blackjack.component.css'],
 })

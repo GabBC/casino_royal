@@ -13,7 +13,7 @@
         <a
           (click)="goTo('games')"
           class="hover:text-gray-300 cursor-pointer inline-block"
-        >
+          >
           Jeux
         </a>
       </div>
@@ -26,33 +26,45 @@
               (click)="goTo('signup')"
               class="hover:text-gray-300 cursor-pointer"
               >Inscription</a
-            >
-          </li>
-          <li>
-            <a
-              (click)="goTo('login')"
-              class="hover:text-gray-300 cursor-pointer"
-              >Connexion</a
-            >
-          </li>
-        </ul>
-      </nav>
+              >
+            </li>
+            <li>
+              <a
+                (click)="goTo('login')"
+                class="hover:text-gray-300 cursor-pointer"
+                >Connexion</a
+                >
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+
+      <!-- Dynamic display of the currently selected section -->
+      @if (navService.section() === 'home') {
+        <app-home></app-home>
+      }
+      @if (navService.section() === 'login') {
+        <app-login></app-login>
+      }
+      @if (navService.section() === 'signup') {
+        <app-signup></app-signup>
+      }
+      @if (navService.section() === 'games') {
+        <app-games></app-games>
+      }
+      @if (navService.section() === 'roulette') {
+        <app-roulette></app-roulette>
+      }
+      @if (navService.section() === 'blackjack') {
+        <app-blackjack></app-blackjack>
+      }
+
+      <!-- footer section -->
+      <footer class="bg-gray-900 py-6 text-center">
+        <p class="text-gray-400">
+          © 2025 BC Vision Limited - Jouez avec modération ;)
+          <i>Tous les gains sont <b style="text-decoration: underline;">fictifs</b></i>
+        </p>
+      </footer>
     </div>
-  </header>
-
-  <!-- Dynamic display of the currently selected section -->
-  <app-home *ngIf="navService.section() === 'home'"></app-home>
-  <app-login *ngIf="navService.section() === 'login'"></app-login>
-  <app-signup *ngIf="navService.section() === 'signup'"></app-signup>
-  <app-games *ngIf="navService.section() === 'games'"></app-games>
-  <app-roulette *ngIf="navService.section() === 'roulette'"></app-roulette>
-  <app-blackjack *ngIf="navService.section() === 'blackjack'"></app-blackjack>
-
-  <!-- footer section -->
-  <footer class="bg-gray-900 py-6 text-center">
-    <p class="text-gray-400">
-      © 2025 BC Vision Limited - Jouez avec modération ;)
-      <i>Tous les gains sont <b style="text-decoration: underline;">fictifs</b></i>
-    </p>
-  </footer>
-</div>

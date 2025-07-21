@@ -1,6 +1,6 @@
 /* Importing necessary Angular modules and core services */
 import { Component, Input } from '@angular/core'
-import { CommonModule } from '@angular/common'
+
 import { NavigationService } from '../../core/services/navigation.service'
 
 /**
@@ -18,7 +18,7 @@ import { NavigationService } from '../../core/services/navigation.service'
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './signup.component.html',
 })
 export class SignupComponent {

@@ -1,6 +1,6 @@
 // angular components
 import { Component } from '@angular/core'
-import { CommonModule } from '@angular/common'
+
 import { FormsModule } from '@angular/forms'
 
 // app services
@@ -26,11 +26,10 @@ import { BetBoardComponent } from './bet-board/bet-board.component'
   selector: 'app-roulette',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     RouletteWheelComponent,
     BetBoardComponent
-  ],
+],
   templateUrl: './roulette.component.html',
   styleUrls: ['./roulette.component.css'],
 })
