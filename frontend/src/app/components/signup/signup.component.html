@@ -1,7 +1,5 @@
 <!-- main container with full screen height and centered content -->
-<div
-  class="min-h-screen flex justify-center items-center bg-gray-900 text-white"
-  >
+<div class="min-h-screen flex justify-center items-center bg-gray-900 text-white">
   <!-- signup form card -->
   <div class="max-w-md w-full bg-gray-800 p-8 rounded-lg shadow-lg">
 
@@ -13,53 +11,39 @@
 
       <!-- username input -->
       <label class="block mb-2 text-sm">Nom d'utilisateur</label>
-      <input
-        type="text"
-        class="w-full p-2 bg-gray-700 border border-gray-600 mb-4 rounded"
-        required
-        />
+      <input type="text" class="w-full p-2 bg-gray-700 border border-gray-600 mb-4 rounded" required
+        autocomplete="username" />
 
-        <!-- email input -->
-        <label class="block mb-2 text-sm">Email</label>
-        <input
-          type="email"
-          class="w-full p-2 bg-gray-700 border border-gray-600 mb-4 rounded"
-          required
-          />
+      <!-- email input -->
+      <label class="block mb-2 text-sm">Email</label>
+      <input type="email" class="w-full p-2 bg-gray-700 border border-gray-600 mb-4 rounded" required
+        autocomplete="email" />
 
-          <!-- password input -->
-          <label class="block mb-2 text-sm">Mot de passe</label>
-          <input
-            type="password"
-            class="w-full p-2 bg-gray-700 border border-gray-600 mb-6 rounded"
-            required
-            />
+      <!-- password input -->
+      <label class="block mb-2 text-sm">Mot de passe</label>
+      <input type="password" class="w-full p-2 bg-gray-700 border border-gray-600 mb-6 rounded" required
+        autocomplete="new-password" />
 
-            <!-- submit button -->
-            <button
-              type="submit"
-              class="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded"
-              >
-              Créer mon compte
-            </button>
+      <!-- submit button -->
+      <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded">
+        Créer mon compte
+      </button>
 
-            <!-- success message shown after signup -->
-            @if (signupSuccess) {
-              <p class="mt-4 text-green-400 text-center">
-                🎉 Inscription réussie ! Bienvenue joueur.
-              </p>
-            }
+      <!-- success message shown after signup -->
+      @if (signupSuccess) {
+      <p class="mt-4 text-green-400 text-center">
+        <fa-icon [icon]="faCheck" class="text-green-400"></fa-icon>
+        Inscription réussie ! Bienvenue joueur.
+      </p>
+      }
 
-            <!-- button to navigate back to home -->
-            <button
-              type="button"
-              class="mt-6 w-full text-sm text-gray-400 hover:underline"
-              (click)="navService.goTo('home')"
-              >
-              ⬅️ Retour à l'accueil
-            </button>
+      <!-- return to home -->
+      <button type="button" class="mt-4 w-full text-sm text-gray-400 hover:underline" (click)="navService.goTo('home')">
+        <fa-icon [icon]="faBack" class="mr-2"></fa-icon>
+        Retour à l'accueil
+      </button>
 
-          </form>
+    </form>
 
-        </div>
-      </div>
+  </div>
+</div>

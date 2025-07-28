@@ -1,7 +1,11 @@
 /* Importing necessary Angular modules and core services */
-import { Component, Input } from '@angular/core'
+import { Component, Input } from "@angular/core";
+import { CommonModule } from "@angular/common";
 
-import { NavigationService } from '../../core/services/navigation.service'
+import { NavigationService } from "../../core/services/navigation.service";
+
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { faArrowLeft, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 
 /**
  * SignupComponent
@@ -16,20 +20,25 @@ import { NavigationService } from '../../core/services/navigation.service'
  * @author Gabos
  */
 @Component({
-  selector: 'app-signup',
+  selector: "app-signup",
   standalone: true,
-  imports: [],
-  templateUrl: './signup.component.html',
+  imports: [CommonModule, FontAwesomeModule],
+  templateUrl: "./signup.component.html",
 })
 export class SignupComponent {
-  
+  /** left arrow icon */
+  faBack = faArrowLeft;
+
+  /** FontAwesome icon for success */
+  faCheck = faCircleCheck;
+
   /**
    * Boolean indicating if the signup was successful
    *
    * @type {boolean}
    * @default false
    */
-  signupSuccess = false
+  signupSuccess = false;
 
   /**
    * Handles the signup form submission
@@ -39,8 +48,8 @@ export class SignupComponent {
    * @param event {Event} The form submit event
    */
   handleSignup(event: Event) {
-    event.preventDefault()
-    this.signupSuccess = true
+    event.preventDefault();
+    this.signupSuccess = true;
   }
 
   /**

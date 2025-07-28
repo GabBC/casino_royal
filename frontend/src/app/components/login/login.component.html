@@ -44,7 +44,8 @@
 
       <!-- return to home -->
       <button type="button" class="mt-4 w-full text-sm text-gray-400 hover:underline" (click)="navService.goTo('home')">
-        ⬅️ Retour à l'accueil
+        <fa-icon [icon]="faBack" class="mr-2"></fa-icon>
+        Retour à l'accueil
       </button>
     </form>
   </div>

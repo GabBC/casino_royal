@@ -10,61 +10,47 @@
 
       <!-- center blocks: games -->
       <div class="flex-1 text-center">
-        <a
-          (click)="goTo('games')"
-          class="hover:text-gray-300 cursor-pointer inline-block"
-          >
+        <a (click)="goTo('games')" class="hover:text-gray-300 cursor-pointer inline-block">
           Jeux
         </a>
       </div>
 
-      <!-- right block: signup and login -->
+      <!-- right block: user actions -->
       <nav>
-        <ul class="flex space-x-4">
-          <li>
-            <a
-              (click)="goTo('signup')"
-              class="hover:text-gray-300 cursor-pointer"
-              >Inscription</a
-              >
+        <ul class="flex space-x-4 items-center">
+          <ng-container *ngIf="!isLoggedIn; else loggedInTemplate">
+            <li>
+              <a (click)="goTo('signup')" class="hover:text-gray-300 cursor-pointer">Inscription</a>
             </li>
             <li>
-              <a
-                (click)="goTo('login')"
-                class="hover:text-gray-300 cursor-pointer"
-                >Connexion</a
-                >
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
-
-      <!-- Dynamic display of the currently selected section -->
-      @if (navService.section() === 'home') {
-        <app-home></app-home>
-      }
-      @if (navService.section() === 'login') {
-        <app-login></app-login>
-      }
-      @if (navService.section() === 'signup') {
-        <app-signup></app-signup>
-      }
-      @if (navService.section() === 'games') {
-        <app-games></app-games>
-      }
-      @if (navService.section() === 'roulette') {
-        <app-roulette></app-roulette>
-      }
-      @if (navService.section() === 'blackjack') {
-        <app-blackjack></app-blackjack>
-      }
-
-      <!-- footer section -->
-      <footer class="bg-gray-900 py-6 text-center">
-        <p class="text-gray-400">
-          © 2025 BC Vision Limited - Jouez avec modération ;)
-          <i>Tous les gains sont <b style="text-decoration: underline;">fictifs</b></i>
-        </p>
-      </footer>
+              <a (click)="goTo('login')" class="hover:text-gray-300 cursor-pointer">Connexion</a>
+            </li>
+          </ng-container>
+          <ng-template #loggedInTemplate>
+            <li>
+              <a (click)="goTo('profile')" class="hover:text-gray-200 cursor-pointer underline font-semibold">
+                {{ username }}
+              </a>
+            </li>
+            <li>
+              <button (click)="logout()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
+                Déconnexion
+              </button>
+            </li>
+          </ng-template>
+        </ul>
+      </nav>
     </div>
+  </header>
+
+  <!-- route outlet -->
+  <router-outlet></router-outlet>
+
+  <!-- footer section -->
+  <footer class="bg-gray-900 py-6 text-center">
+    <p class="text-gray-400">
+      © 2025 BC Vision Limited - Jouez avec modération ;)
+      <i>Tous les gains sont <b style="text-decoration: underline;">fictifs</b></i>
+    </p>
+  </footer>
+</div>

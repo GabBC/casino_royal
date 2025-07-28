@@ -1,3 +1,10 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #10b981; /* par exemple ton vert */
+  /* Ou dans le HTML, dans la div racine : class="min-h-screen bg-green-500" avec Tailwind */
+}
+
 /* spin animation class with smooth infinite rotation */
 .spin-animation {
   animation: spin 3s cubic-bezier(0.25, 1, 0.5, 1) infinite;

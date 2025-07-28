@@ -6,6 +6,7 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import {
   faCircleCheck,
   faCircleExclamation,
+  faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
 /* App services */
@@ -47,6 +48,8 @@ export class LoginComponent {
   faCheck = faCircleCheck;
   /** FontAwesome icon for error */
   faError = faCircleExclamation;
+  /** FontAwesome icon for back navigation */
+  faBack = faArrowLeft;
 
   /**
    * Constructor injecting navigation and authentication services.
@@ -88,6 +91,11 @@ export class LoginComponent {
           // Store the JWT token in local storage
           if (res.token) {
             localStorage.setItem("token", res.token);
+            this.navService.isLogged.set(true);
+            this.navService.goTo("games");
+          } else {
+            this.loginError = "Token manquant dans la réponse";
+            this.loginSuccess = false;
           }
         },
         error: (err) => {
