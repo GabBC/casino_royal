@@ -58,4 +58,13 @@ export class AuthService {
   private hasToken(): boolean {
     return !!localStorage.getItem(this.tokenKey);
   }
+
+  /**
+   * Checks if the user is currently logged in.
+   *
+   * @returns true if user is logged in, false otherwise
+   */
+  isLoggedIn(): boolean {
+    return this.hasToken();
+  }
 }

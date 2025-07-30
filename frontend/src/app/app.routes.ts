@@ -1,47 +1,57 @@
 import { Routes } from "@angular/router";
 import { authGuard } from "./core/guards/auth.guard";
+import { noAuthGuard } from "./core/guards/no-auth.guard";
+
+// Define the app URLs
+const APP_URLS = {
+  HOME: "",
+  LOGIN: "login",
+  SIGNUP: "signup",
+  PROFILE: "profile",
+  GAMES: "games",
+  ROULETTE: "games/roulette",
+  BLACKJACK: "games/blackjack",
+};
 
 export const routes: Routes = [
   {
-    path: "",
+    path: APP_URLS.HOME,
     loadComponent: () =>
       import("./components/home/home.component").then((m) => m.HomeComponent),
   },
   {
-    path: "login",
+    path: APP_URLS.LOGIN,
+    canActivate: [noAuthGuard], // Prevent logged-in users from accessing login page
     loadComponent: () =>
       import("./components/login/login.component").then(
         (m) => m.LoginComponent
       ),
-    canActivate: [authGuard],
   },
   {
-    path: "signup",
+    path: APP_URLS.SIGNUP,
+    canActivate: [noAuthGuard], // Prevent logged-in users from accessing signup page
     loadComponent: () =>
       import("./components/signup/signup.component").then(
         (m) => m.SignupComponent
       ),
-    canActivate: [authGuard],
   },
   {
-    path: "profile/:username",
+    path: APP_URLS.PROFILE,
+    canActivate: [authGuard],
     loadComponent: () =>
       import("./components/profile/profile.component").then(
         (m) => m.ProfileComponent
       ),
-    canActivate: [authGuard],
   },
   {
-    path: "games",
-    canActivate: [authGuard],
+    path: APP_URLS.GAMES,
     loadComponent: () =>
       import("./components/games/games.component").then(
         (m) => m.GamesComponent
       ),
   },
-  // Routes enfants en dehors, pour ne pas afficher GamesComponent à la fois
   {
-    path: "games/roulette",
+    path: APP_URLS.ROULETTE,
     canActivate: [authGuard],
     loadComponent: () =>
       import("./components/games/roulette/roulette.component").then(
@@ -49,7 +59,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: "games/blackjack",
+    path: APP_URLS.BLACKJACK,
     canActivate: [authGuard],
     loadComponent: () =>
       import("./components/games/blackjack/blackjack.component").then(
