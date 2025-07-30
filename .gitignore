@@ -4,6 +4,7 @@ Thumbs.db
 *.log
 *.tmp
 .env
+commands.md
 
 # === FRONTEND (Angular) ===
 /frontend/node_modules/

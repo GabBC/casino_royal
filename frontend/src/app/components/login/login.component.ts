@@ -1,7 +1,8 @@
 /* Angular modules */
 import { Component } from "@angular/core";
-
+import { Router } from "@angular/router";
 import { FormsModule } from "@angular/forms";
+
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import {
   faCircleCheck,
@@ -59,7 +60,8 @@ export class LoginComponent {
    */
   constructor(
     public navService: NavigationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   /**
@@ -92,7 +94,7 @@ export class LoginComponent {
           if (res.token) {
             localStorage.setItem("token", res.token);
             this.navService.isLogged.set(true);
-            this.navService.goTo("games");
+            this.router.navigate(['/games']);
           } else {
             this.loginError = "Token manquant dans la réponse";
             this.loginSuccess = false;

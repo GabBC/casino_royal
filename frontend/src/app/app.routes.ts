@@ -13,6 +13,7 @@ export const routes: Routes = [
       import("./components/login/login.component").then(
         (m) => m.LoginComponent
       ),
+    canActivate: [authGuard],
   },
   {
     path: "signup",
@@ -20,6 +21,7 @@ export const routes: Routes = [
       import("./components/signup/signup.component").then(
         (m) => m.SignupComponent
       ),
+    canActivate: [authGuard],
   },
   {
     path: "profile/:username",
