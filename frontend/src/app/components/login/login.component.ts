@@ -1,109 +1,95 @@
-/* Angular modules */
-import { Component } from "@angular/core";
-import { Router } from "@angular/router";
-import { FormsModule } from "@angular/forms";
+import { Component, OnInit, inject } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormBuilder, Validators, ReactiveFormsModule } from "@angular/forms";
+import { Router, ActivatedRoute } from "@angular/router";
 
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import {
-  faCircleCheck,
-  faCircleExclamation,
-  faArrowLeft,
-} from "@fortawesome/free-solid-svg-icons";
-
-/* App services */
-import { NavigationService } from "../../core/services/navigation.service";
 import { AuthService } from "../../core/services/auth.service";
+import { GlobalErrorService } from "../../core/services/global-error.service";
 
 /**
  * LoginComponent
  *
- * Component responsible for handling user login.
- * Displays a login form and processes authentication via AuthService.
+ * Presents a login form (username/password) using Angular Reactive Forms.
+ * Supports a "remember me" checkbox: stores the token in localStorage (remember)
+ * or sessionStorage (non-remember).
  *
- * @selector app-login
- * @standalone true
- * @imports CommonModule, FormsModule
- * @templateUrl ./login.component.html
- * @author Gabos
+ * On successful login, it navigates to the `redirect` query param if present,
+ * otherwise to `/games`.
+ *
+ * Error handling:
+ * - Uses GlobalErrorService to display a global toast/banner for errors.
+ * - Avoids console logging of sensitive data.
  */
 @Component({
   selector: "app-login",
   standalone: true,
-  imports: [FormsModule, FontAwesomeModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: "./login.component.html",
 })
-export class LoginComponent {
-  /** User's username */
-  username: string = "";
+export class LoginComponent implements OnInit {
+  /** DI services */
+  private readonly fb = inject(FormBuilder);
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly errorBus = inject(GlobalErrorService);
 
-  /** User's password */
-  password: string = "";
+  /** UI state */
+  isLoading = false;
 
-  /** Indicates if login was successful */
-  loginSuccess: boolean = false;
+  /** Reactive form */
+  form = this.fb.nonNullable.group({
+    username: ["", [Validators.required, Validators.minLength(3)]],
+    password: ["", [Validators.required]],
+    rememberMe: [false],
+  });
 
-  /** Holds an error message on login failure */
-  loginError: string | null = null;
+  ngOnInit(): void {
+    // Safety: if already logged in, bounce to /games
+    if (this.auth.isLoggedIn()) {
+      this.router.navigateByUrl("/games");
+    }
+  }
 
-  /** FontAwesome icon for success */
-  faCheck = faCircleCheck;
-  /** FontAwesome icon for error */
-  faError = faCircleExclamation;
-  /** FontAwesome icon for back navigation */
-  faBack = faArrowLeft;
-
-  /**
-   * Constructor injecting navigation and authentication services.
-   *
-   * @param navService NavigationService used for routing/navigation
-   * @param authService AuthService used for login requests
-   */
-  constructor(
-    public navService: NavigationService,
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  /** Shorthand for template access */
+  get f() {
+    return this.form.controls;
+  }
 
   /**
-   * Handles the login form submission.
-   * Calls the backend to authenticate the user and stores the JWT on success.
-   *
-   * @param event {Event} The form submit event
+   * Handles the login flow:
+   * - Validates the form
+   * - Calls AuthService.login with rememberMe
+   * - Navigates to `redirect` (or /games) on success
+   * - Pushes errors to GlobalErrorService on failure
    */
-  handleLogin(event: Event): void {
-    event.preventDefault();
+  onSubmit(): void {
+    if (this.form.invalid || this.isLoading) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-    this.authService
-      .login({
-        username: this.username,
-        password: this.password,
-      })
-      .subscribe({
-        next: (res) => {
-          if (!res.success) {
-            this.loginError =
-              res.message || "Erreur inconnue lors de la connexion";
-            this.loginSuccess = false;
-            return;
-          }
+    const { username, password, rememberMe } = this.form.getRawValue();
+    const redirect =
+      this.route.snapshot.queryParamMap.get("redirect") || "/games";
 
-          this.loginSuccess = true;
-          this.loginError = null;
+    this.isLoading = true;
 
-          // Store the JWT token in local storage
-          if (res.token) {
-            localStorage.setItem("token", res.token);
-            this.navService.isLogged.set(true);
-            this.router.navigate(['/games']);
-          } else {
-            this.loginError = "Token manquant dans la réponse";
-            this.loginSuccess = false;
-          }
-        },
-        error: (err) => {
-          this.loginError = "Erreur de connexion au serveur";
-          this.loginSuccess = false;
-        },
-      });
+    this.auth.login({ username, password }, !!rememberMe).subscribe({
+      next: (res) => {
+        this.isLoading = false;
+        if (res?.success) {
+          this.router.navigateByUrl(redirect);
+        } else {
+          this.errorBus.setError("Identifiants incorrects.");
+        }
+      },
+      error: () => {
+        this.isLoading = false;
+        this.errorBus.setError(
+          "Connexion impossible. Vérifiez vos identifiants."
+        );
+      },
+    });
   }
 }

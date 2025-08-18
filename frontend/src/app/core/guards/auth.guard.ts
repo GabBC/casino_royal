@@ -1,37 +1,25 @@
-import { CanActivateFn } from "@angular/router";
+import { CanActivateFn, Router } from "@angular/router";
+import { inject } from "@angular/core";
+import { AuthService } from "../services/auth.service";
 
 /**
  * AuthGuard
  *
- * A simple guard function that checks if the user is logged in by verifying the presence of a token.
- * If the user is logged in, they are prevented from accessing the login page.
- *
- * @function authGuard
- * @returns {boolean} `true` if the user is not logged in (can access the login page), `false` otherwise.
+ * Protects routes that require an authenticated user.
+ * If not logged in, returns a UrlTree redirecting to the login page
+ * and preserves the intended URL in a "redirect" query param.
  */
-export const authGuard: CanActivateFn = () => {
-  // Check if the user is logged in by checking the existence of the token in localStorage
-  const token = localStorage.getItem("token");
+export const authGuard: CanActivateFn = (route, state) => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
 
-  // If a token exists and the user in on the login page, redirect to the 'games' page (block access to login)
-  if (
-    token &&
-    (window.location.pathname === "/login" ||
-      window.location.pathname === "/signup")
-  ) {
-    window.location.href = "/games"; // Simple redirect to the games page
-    return false;
-  } else if (
-    !token &&
-    (window.location.pathname === "/games/roulette" ||
-      window.location.pathname === "/games/blackjack")
-  ) {
-    // If no token is found, the user can't access to the games page
-    window.location.href = "/login"; // Redirect to the login page
-    return false;
+  // Prefer using the service to decide login state (token presence)
+  if (auth.isLoggedIn()) {
+    return true;
   }
 
-  console.log(window.location.pathname);
-
-  return true;
+  // Redirect to /login, keeping the original URL to come back after login
+  return router.createUrlTree(["/login"], {
+    queryParams: { redirect: state.url },
+  });
 };

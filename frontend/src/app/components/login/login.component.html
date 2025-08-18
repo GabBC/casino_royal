@@ -1,52 +1,40 @@
-<!-- main container with full screen height and centered content -->
-<div class="min-h-screen flex justify-center items-center bg-gray-900 text-white">
-  <!-- login form card -->
-  <div class="max-w-md w-full bg-gray-800 p-8 rounded-lg shadow-lg">
+<div class="max-w-md mx-auto mt-16 p-6 bg-gray-800 text-white rounded-xl shadow-lg">
+  <h2 class="text-3xl font-bold mb-6 text-center">Connexion</h2>
 
-    <!-- title -->
-    <h3 class="text-3xl font-bold text-center mb-6">Connexion</h3>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+    <div>
+      <label class="block text-sm">Nom d'utilisateur</label>
+      <input type="text" formControlName="username" class="w-full p-2 rounded text-black" autocomplete="username" />
+      <p class="mt-1 text-sm text-red-300" *ngIf="f.username.touched && f.username.invalid">
+        <span *ngIf="f.username.errors?.['required']">Le nom d'utilisateur est requis.</span>
+        <span *ngIf="f.username.errors?.['minlength']">Minimum 3 caractères.</span>
+      </p>
+    </div>
 
-    <!-- login form -->
-    <form (submit)="handleLogin($event)">
+    <div>
+      <label class="block text-sm">Mot de passe</label>
+      <input type="password" formControlName="password" class="w-full p-2 rounded text-black"
+        autocomplete="current-password" />
+      <p class="mt-1 text-sm text-red-300" *ngIf="f.password.touched && f.password.invalid">
+        Le mot de passe est requis.
+      </p>
+    </div>
 
-      <!-- success message shown after login -->
-      @if (loginSuccess) {
-      <div
-        class="mb-4 p-2 text-green-800 bg-green-200 rounded border border-green-400 flex items-center justify-center space-x-2">
-        <fa-icon [icon]="faCheck" class="text-green-700"></fa-icon>
-        <span>Connexion réussie !</span>
-      </div>
-      }
+    <!-- Remember me -->
+    <label class="flex items-center gap-2 select-none">
+      <input type="checkbox" formControlName="rememberMe" class="h-4 w-4" />
+      <span class="text-sm">Se souvenir de moi</span>
+    </label>
 
-      <!-- error message shown on login failure -->
-      @if (loginError) {
-      <div
-        class="mb-4 p-2 text-red-800 bg-red-200 rounded border border-red-400 flex items-center justify-center space-x-2">
-        <fa-icon [icon]="faError" class="text-red-700"></fa-icon>
-        <span>{{ loginError }}</span>
-      </div>
-      }
-
-      <!-- username input -->
-      <label class="block mb-2 text-sm">Nom d'utilisateur</label>
-      <input type="text" class="w-full p-2 bg-gray-700 border border-gray-600 mb-4 rounded" [(ngModel)]="username"
-        name="username" required autocomplete="username" />
-
-      <!-- password input -->
-      <label class="block mb-2 text-sm">Mot de passe</label>
-      <input type="password" class="w-full p-2 bg-gray-700 border border-gray-600 mb-6 rounded" [(ngModel)]="password"
-        name="password" required autocomplete="current-password" />
-
-      <!-- submit button -->
-      <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded">
-        Se connecter
-      </button>
-
-      <!-- return to home -->
-      <button type="button" class="mt-4 w-full text-sm text-gray-400 hover:underline" (click)="navService.goTo('home')">
-        <fa-icon [icon]="faBack" class="mr-2"></fa-icon>
-        Retour à l'accueil
-      </button>
-    </form>
-  </div>
+    <!-- Submit with visible spinner -->
+    <button type="submit"
+      class="w-full mt-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 rounded disabled:opacity-60 flex items-center justify-center gap-2"
+      [disabled]="form.invalid || isLoading" [attr.aria-busy]="isLoading">
+      <svg *ngIf="isLoading" class="animate-spin h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" stroke="white" stroke-width="4" fill="none" opacity="0.25"></circle>
+        <path d="M22 12a10 10 0 0 1-10 10" stroke="white" stroke-width="4" fill="none"></path>
+      </svg>
+      <span>{{ isLoading ? 'Connexion…' : 'Se connecter' }}</span>
+    </button>
+  </form>
 </div>

@@ -9,10 +9,12 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * Adapter class that wraps a {@link User} entity to implement Spring Security's {@link UserDetails}.
- * This allows Spring Security to handle authentication and authorization based on your custom User entity.
+ * Adapter class that wraps a {@link User} entity to implement Spring Security's
+ * {@link UserDetails}.
+ * This allows Spring Security to handle authentication and authorization based
+ * on your custom User entity.
  */
-public class CustomUserDetails implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
     private final User user;
 
@@ -21,19 +23,38 @@ public class CustomUserDetails implements UserDetails {
      *
      * @param user the user entity to wrap
      */
-    public CustomUserDetails(User user) {
+    public UserDetailsImpl(User user) {
         this.user = user;
     }
 
     /**
-     * Returns the authorities granted to the user.
-     * In this case, we assume a single fixed role: "USER".
+     * Returns the authorities (roles) granted to the current user.
+     * 
+     * This implementation wraps the user's role as a single
+     * {@link GrantedAuthority},
+     * allowing Spring Security to perform authorization checks (e.g.,
+     * with @PreAuthorize).
+     * 
      *
-     * @return a collection of granted authorities
+     * <p>
+     * <strong>Available roles in the system:</strong>
+     * </p>
+     * <ul>
+     * <li>{@code ROLE_ADMIN} — Full access to all administrative features</li>
+     * <li>{@code ROLE_USER} — Default user role, limited to standard features</li>
+     * review</li>
+     * </ul>
+     * 
+     * Example: If the user's role is "ROLE_ADMIN", it will be returned as a
+     * singleton authority.
+     *
+     * @return a collection containing the user's single role as a
+     *         {@link GrantedAuthority}
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList(); // Replace with roles if needed
+        return Collections.singletonList(
+                (GrantedAuthority) () -> user.getRole());
     }
 
     /**

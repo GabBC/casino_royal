@@ -1,15 +1,29 @@
 package com.bcvision.casino_royal.model;
 
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
-
 /**
- * Represents a technical user who can authenticate to access the backend system.
- * This is not a Casino Royal player, but rather an administrator or system-level user.
+ * User entity representing a technical user who can authenticate and manage the
+ * backend system.
+ * This is not a Casino Royal player, but rather an administrator or
+ * system-level user.
+ *
+ * Lombok is used to generate getters, setters, and constructors automatically.
+ * The 'users' table name is used to avoid conflicts with SQL reserved keywords.
+ * 
+ * @author Gabriel
+ * @since 2025-08-06
  */
 @Entity
-@Table(name = "users") // Avoid conflict with reserved SQL keywords
+@Table(name = "users")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     /**
@@ -34,143 +48,26 @@ public class User {
     private String password;
 
     /**
-     * User's email.
+     * User's email address.
      */
     @Column(nullable = false, unique = true)
     private String email;
 
     /**
-     * User's role (e.g. ROLE_USER, ROLE_ADMIN).
+     * User's role (e.g., ROLE_ADMIN, ROLE_USER).
      */
     @Column(nullable = false)
     private String role;
 
     /**
-     * Date of user creation.
+     * Timestamp of user creation.
      */
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     /**
-     * Whether the account is active.
+     * Whether the user account is active.
      */
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
-
-    // ==========================
-    // === Getters & Setters ===
-    // ==========================
-
-    /**
-     * Gets the user's unique ID.
-     *
-     * @return the ID of the user
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Sets the user's unique ID.
-     *
-     * @param id the ID to set
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    /**
-     * Gets the username of the user.
-     *
-     * @return the username
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * Sets the username of the user.
-     *
-     * @param username the username to set
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /**
-     * Gets the hashed password of the user.
-     *
-     * @return the hashed password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Sets the user's hashed password.
-     *
-     * @param password the hashed password to set
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     * Gets the email address.
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Sets the email address.
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * Gets the user role.
-     */
-    public String getRole() {
-        return role;
-    }
-
-    /**
-     * Sets the user role.
-     */
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    /**
-     * Gets the creation date.
-     */
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    /**
-     * Sets the creation date.
-     */
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    /**
-     * Checks if the user is enabled.
-     */
-    public boolean getIsActive() {
-        return isActive;
-    }
-
-    /**
-     * Enables or disables the user.
-     */
-    public void setIsActive(boolean enabled) {
-        this.isActive = enabled;
-    }
-
-    
-
 }

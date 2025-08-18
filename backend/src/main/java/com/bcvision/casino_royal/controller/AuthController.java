@@ -1,4 +1,4 @@
-package com.bcvision.casino_royal.security.jwt.controller;
+package com.bcvision.casino_royal.controller;
 
 import com.bcvision.casino_royal.dto.LoginRequest;
 import com.bcvision.casino_royal.dto.LoginResponse;

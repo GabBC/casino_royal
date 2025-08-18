@@ -12,16 +12,7 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 // Core services
 //import { NavigationService } from "./core/services/navigation.service";
 import { AuthService } from "./core/services/auth.service";
-
-// Pages components
-//import { HomeComponent } from "./components/home/home.component";
-//import { LoginComponent } from "./components/login/login.component";
-//import { SignupComponent } from "./components/signup/signup.component";
-//import { GamesComponent } from "./components/games/games.component";
-
-// Games components
-//import { RouletteComponent } from "./components/games/roulette/roulette.component";
-//import { BlackjackComponent } from "./components/games/blackjack/blackjack.component";
+import { GlobalErrorBannerComponent } from "./components/global-error-banner.component";
 
 /**
  * Main application component
@@ -40,14 +31,9 @@ import { AuthService } from "./core/services/auth.service";
   standalone: true,
   imports: [
     CommonModule,
-    //HomeComponent,
-    //LoginComponent,
-    //SignupComponent,
-    //GamesComponent,
-    //RouletteComponent,
-    //BlackjackComponent,
     FontAwesomeModule,
     RouterModule,
+    GlobalErrorBannerComponent,
   ],
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"],
@@ -103,10 +89,6 @@ export class AppComponent {
     // Transforme la "section" en chemin URL
     // Par exemple, "home" => "/", sinon "/section"
     const route = section === "home" ? "/" : `/${section}`;
-    if (section === "profile") {
-      this.router.navigate(["/profile", this.username]);
-    } else {
-      this.router.navigate([route]);
-    }
+    this.router.navigate([route]);
   }
 }

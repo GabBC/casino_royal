@@ -1,70 +1,70 @@
+// src/app/core/services/auth.service.ts
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable, BehaviorSubject } from "rxjs";
-import { tap } from "rxjs/operators";
+import { BehaviorSubject, Observable, tap } from "rxjs";
+import { ApiUrlService } from "../../core/services/api-url.service";
 
-@Injectable({
-  providedIn: "root",
-})
+export interface LoginRequest {
+  username: string;
+  password: string;
+  rememberMe?: boolean;
+}
+export interface LoginResponse {
+  success: boolean;
+  token?: string;
+  message?: string;
+}
+
+@Injectable({ providedIn: "root" })
 export class AuthService {
-  private apiUrl = "http://localhost:8080/api/auth/login";
-  private tokenKey = "token";
+  private readonly tokenKey = "token";
+  private readonly isLoggedInSubject = new BehaviorSubject<boolean>(
+    this.hasToken()
+  );
+  readonly isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  /** Subject to track the login status across the app */
-  private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
-  public isLoggedIn$ = this.isLoggedInSubject.asObservable();
+  constructor(private http: HttpClient, private api: ApiUrlService) {}
 
-  constructor(private http: HttpClient) {}
-
-  /**
-   * Sends login request and stores token on success.
-   *
-   * @param credentials Login form data
-   * @returns Observable with login response
-   */
-  login(credentials: { username: string; password: string }): Observable<any> {
-    return this.http.post<any>(this.apiUrl, credentials).pipe(
-      tap((res) => {
-        if (res.success && res.token) {
-          localStorage.setItem(this.tokenKey, res.token);
-          this.isLoggedInSubject.next(true);
-        }
-      })
-    );
+  login(
+    credentials: { username: string; password: string },
+    rememberMe = false
+  ): Observable<LoginResponse> {
+    return this.http
+      .post<LoginResponse>(this.api.auth.login(), credentials)
+      .pipe(
+        tap((res) => {
+          if (res?.success && res?.token) {
+            this.storeToken(res.token, rememberMe);
+            this.isLoggedInSubject.next(true);
+          }
+        })
+      );
   }
 
-  /**
-   * Logs out the user by clearing token and login state.
-   */
   logout(): void {
     localStorage.removeItem(this.tokenKey);
+    sessionStorage.removeItem(this.tokenKey);
     this.isLoggedInSubject.next(false);
   }
 
-  /**
-   * Retrieves the current JWT token from storage.
-   *
-   * @returns JWT token string or null
-   */
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return (
+      localStorage.getItem(this.tokenKey) ??
+      sessionStorage.getItem(this.tokenKey)
+    );
   }
 
-  /**
-   * Checks if a JWT token is currently stored.
-   *
-   * @returns true if token exists
-   */
-  private hasToken(): boolean {
-    return !!localStorage.getItem(this.tokenKey);
-  }
-
-  /**
-   * Checks if the user is currently logged in.
-   *
-   * @returns true if user is logged in, false otherwise
-   */
   isLoggedIn(): boolean {
-    return this.hasToken();
+    return !!this.getToken();
+  }
+
+  private storeToken(token: string, remember: boolean): void {
+    localStorage.removeItem(this.tokenKey);
+    sessionStorage.removeItem(this.tokenKey);
+    (remember ? localStorage : sessionStorage).setItem(this.tokenKey, token);
+  }
+
+  private hasToken(): boolean {
+    return !!this.getToken();
   }
 }

@@ -1,123 +1,57 @@
 package com.bcvision.casino_royal.security.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Value;
 
 /**
- * Utility class for generating and validating JWT tokens.
- * The token contains the userID as a claim at the beginning.
- * 
- * @author Gabriel Benniks
- * @date 2025-07-09
- * @lastModified 2025-07-09
+ * JWT helper: subject = username; includes userId claim; HS256 signing.
  */
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
-    private final String SECRET_KEY;
+    private final Key key;
+    private final long expirationMs;
 
-    private final long JWT_EXPIRATION_MS = 1000 * 60 * 60 * 10; // 10 heures
-
-    /**
- * Constructor to initialize JwtTokenProvider with the JWT secret key.
- *
- * @param jwtSecret the secret key used to sign and verify JWT tokens, injected from application properties
- */
-public JwtUtil(@Value("${jwt.secret}") String jwtSecret) {
-    this.SECRET_KEY = jwtSecret;
-}
-
-    private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(
-                java.util.Base64.getEncoder().encodeToString(SECRET_KEY.getBytes()));
-        return Keys.hmacShaKeyFor(keyBytes);
+    public JwtUtil(
+            @Value("${jwt.secret}") String secret,
+            @Value("${jwt.expiration}") long expirationMs) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.expirationMs = expirationMs;
     }
 
-    /**
-     * Extracts claims from the JWT token.
-     * 
-     * @param token JWT token
-     * @return Claims object
-     */
-    private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    /**
-     * Extracts username (subject) from the token.
-     * 
-     * @param token JWT token
-     * @return username
-     */
-    public String extractUsername(String token) {
-        return extractAllClaims(token).getSubject();
-    }
-
-    /**
-     * Extracts the userID claim from the token.
-     * 
-     * @param token JWT token
-     * @return userID as String
-     */
-    public String extractUserId(String token) {
-        return extractAllClaims(token).get("userID", String.class);
-    }
-
-    /**
-     * Checks if the token is expired.
-     * 
-     * @param token JWT token
-     * @return true if expired, false otherwise
-     */
-    public boolean isTokenExpired(String token) {
-        return extractAllClaims(token).getExpiration().before(new Date());
-    }
-
-    /**
-     * Generates a JWT token with username and userID.
-     * 
-     * @param username username of the user
-     * @param userId   userID to embed in the token
-     * @return JWT token string
-     */
+    /** Issues a signed JWT with username as subject and userId as custom claim. */
     public String generateToken(String username, Long userId) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("userID", userId); // place userID at the start of claims
-
+        long now = System.currentTimeMillis();
         return Jwts.builder()
-                .setClaims(claims)
                 .setSubject(username)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION_MS))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .claim("userId", userId)
+                .setIssuedAt(new Date(now))
+                .setExpiration(new Date(now + expirationMs))
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    /**
-     * Validates the token against username and expiration.
-     * 
-     * @param token    JWT token
-     * @param username username to match
-     * @return true if valid, false otherwise
-     */
-    public boolean validateToken(String token, String username) {
-        final String tokenUsername = extractUsername(token);
-        return (tokenUsername.equals(username) && !isTokenExpired(token));
+    /** Returns the username (subject) from the token. */
+    public String getUsername(String token) {
+        return parse(token).getBody().getSubject();
+    }
+
+    /** Basic validation: signature + expiration. */
+    public boolean isValid(String token) {
+        try {
+            parse(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    private Jws<Claims> parse(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
     }
 }
